@@ -1,6 +1,6 @@
 {
     "terminal.integrated.env.linux": {
-        "PATH": "/root/.platformio/penv/bin:/root/.platformio/penv:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl",
+        "PATH": "/home/caio/.platformio/penv/bin:/home/caio/.platformio/penv:/home/caio/.pyenv/plugins/pyenv-virtualenv/shims:/home/caio/.pyenv/shims:/home/caio/.pyenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games",
         "PLATFORMIO_CALLER": "vscode"
     }
 }
