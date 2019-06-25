@@ -2,11 +2,13 @@
 dht11 DHT;
 #define DHT11_PIN 4
 #define pino_sinal_analogico A0
-#define pino_led_vermelho 5
+#define ventilador 5
 #define pino_led_amarelo 6
 #define pino_led_verde 7
-#define led 9
+#define ledF 9
+#define led2 10
 int valor_analogico;
+int i = 0;
 
 void setup(){
   Serial.begin(9600);
@@ -15,10 +17,10 @@ void setup(){
   Serial.println(DHT11LIB_VERSION);
   Serial.println();
   Serial.println("Type,\tstatus,\tHumidity (%),\tTemperature (C)");
-  pinMode(led, OUTPUT);
-  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(ledF, OUTPUT);
+  pinMode(led2, OUTPUT);
   pinMode(pino_sinal_analogico, INPUT);
-  pinMode(pino_led_vermelho, OUTPUT);
+  pinMode(ventilador, OUTPUT);
   pinMode(pino_led_amarelo, OUTPUT);
   pinMode(pino_led_verde, OUTPUT);
 
@@ -26,11 +28,15 @@ void setup(){
 
 void loop(){
   int chk;
+  
+  controleT();
+  
    valor_analogico = analogRead(pino_sinal_analogico);
  
   //Mostra o valor da porta analogica no serial monitor
   Serial.print("Porta analogica: ");
   Serial.print(valor_analogico);
+  Serial.print("\n");
 
   
   Serial.print("DHT11, \t");
@@ -54,22 +60,24 @@ void loop(){
   Serial.print(",\t");
   Serial.println(DHT.temperature,1);
 
-  if(DHT.humidity < 35){
- digitalWrite(led, HIGH);  
- }
-  if (DHT.humidity > 50){
-  digitalWrite(led, LOW);   
-  }
+//  if(DHT.humidity < 35){
+// digitalWrite(ledF, HIGH);  
+// }
+//  if (DHT.humidity > 50){
+//  digitalWrite(ledF, LOW);   
+//  }
 
-  if(DHT.temperature >= 30){
- digitalWrite(LED_BUILTIN, HIGH);  
+  if(DHT.temperature >= 20){
+ digitalWrite(ventilador, HIGH);  
  }
-  else{
-  digitalWrite(LED_BUILTIN, LOW);   
+  if (DHT.temperature <= 10){
+  digitalWrite(led2, LOW);
+   digitalWrite(ventilador, LOW);  
+   
   }
   
  //Solo umido, acende o led verde
-  if (valor_analogico < 600)
+  if (valor_analogico < 500)
   {
     Serial.println(" Status: Solo umido");
     apagaleds();
@@ -77,7 +85,7 @@ void loop(){
   }
  
   //Solo com umidade moderada, acende led amarelo
-  if (valor_analogico >= 600 && valor_analogico < 800)
+  if (valor_analogico >= 500 && valor_analogico < 800)
   {
     Serial.println(" Status: Umidade moderada");
     apagaleds();
@@ -85,19 +93,31 @@ void loop(){
   }
  
   //Solo seco, acende led vermelho
-  if ( valor_analogico > 800)
-  {
-    Serial.println(" Status: Solo seco");
-    apagaleds();
-    digitalWrite(pino_led_vermelho, HIGH);
-  }
+//  if ( valor_analogico > 800)
+//  {
+//    Serial.println(" Status: Solo seco");
+//    apagaleds();
+//    digitalWrite(led, HIGH);
+//  }
 
-  delay(2000);
+  Serial.println(i);
+  delay(1000);
+}
+
+void controleT(){
+  i++;
+  if(i >= 50){
+    digitalWrite(ledF, HIGH);
+  }
+  if(i > 100){
+    i = 1;
+    digitalWrite(ledF, LOW);
+  }
 }
 
 void apagaleds()
 {
-  digitalWrite(pino_led_vermelho, LOW);
+//  digitalWrite(ventilador, LOW);
   digitalWrite(pino_led_amarelo, LOW);
   digitalWrite(pino_led_verde, LOW);
 }
